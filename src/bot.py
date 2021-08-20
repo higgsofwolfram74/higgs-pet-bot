@@ -1,13 +1,21 @@
 from pathlib import Path
+import json
 import discord
+from discord.ext import commands
 
-with Path("env-var/bot.env").open('r') as f:
-    TOKEN = f.readline().strip("\"")
+TOKEN = json.load(Path("D:/vscode/pyspls/cat-bot/env-var/env.json").open("r"))["DISCORD_TOKEN"]
 
-client = discord.Client()
+bot = commands.Bot(command_prefix="~")
 
-@client.event
-async def on_ready():
-    print(f'{client.user} has connected to Discord!')
+#cog command uses function name as command name
+class PetGetter(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
-client.run(TOKEN)
+    @commands.command()
+    async def hello(self, ctx):
+        await ctx.send("Howdy")
+
+bot.add_cog(PetGetter(bot))
+
+bot.run(TOKEN)
