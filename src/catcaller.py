@@ -1,4 +1,5 @@
 import json
+import time
 from pathlib import Path
 from typing import Dict, List
 import asyncio
@@ -13,7 +14,7 @@ class Pet_Pics():
     link: str
     pictures: str
 
-    def __init__(self, path:str, pet: str):
+    def __init__(self, path: Path, pet: str):
         self.path = path
 
         if pet == "cat":
@@ -31,7 +32,7 @@ class Pet_Pics():
         query = "?"
 
         if len(breed) == 4:
-            self.query = query + "breed_ids=" + breed
+            self.link += query + "breed_ids=" + breed
 
     def query_response(self, params: Dict[str, str]):
         query = "?"
@@ -46,7 +47,7 @@ class Pet_Pics():
         else:
             query += "mime_types=jpg,png"
 
-        self.query = query
+        self.link += query
 
     async def load_pictures(self) -> Dict[str, str]:        
         async with aiohttp.ClientSession() as session:
@@ -57,24 +58,25 @@ class Pet_Pics():
 
     def picture_urls(self) -> List[str]:
         return [url['url'] for url in self.pictures]
+
+    async def simple_pet(self) -> str:
+        await self.get_key()
+
+        await self.load_pictures()
+        
+
+        return self.pictures[0]['url']
+
             
-
-
 if __name__ == "__main__":
     context = {
         "amount": 3,
         "gif":0
     }
 
-    to_keys = Path("./env-var/env.json")
-    my_cats = Pet_Pics(to_keys, "cat")
-    asyncio.run(my_cats.get_key())
+    test = Pet_Pics(path=Path("./env-var/env.json"), pet="cat")
 
-    my_cats.query_response(context)
-    asyncio.run(my_cats.load_pictures())
-
-    for picture in my_cats.picture_urls():
-        print(picture)
+    print(asyncio.run(test.simple_pet()))
     
     
     
