@@ -22,13 +22,27 @@ class PetGetter(commands.Cog):
     @commands.command(name="cat")
     async def cat(self, ctx, *args):
         cat = Pet_Pics(Path("./env-var/env.json"), "cat")
-        url = await cat.simple_pet()
+        url = await cat.pet_get()
         await ctx.send(url)
 
     @commands.command(name="dog")
     async def dog(self, ctx, *args):
         dog = Pet_Pics(Path("./env-var/env.json"), "dog")
-        url = await dog.simple_pet()
+        url = await dog.pet_get()
+        await ctx.send(url)
+
+    @commands.command(name="cat-gif")
+    async def cat_gif(self, ctx):
+        cat = Pet_Pics(Path("./env-var/env.json"), "cat")
+        cat.query_type(gif = True)
+        url = await cat.pet_get()
+        await ctx.send(url)
+    
+    @commands.command(name="dog-gif")
+    async def dog_gif(self, ctx):
+        dog = Pet_Pics(Path("./env-var/env.json"), "dog")
+        dog.query_type(gif = True)
+        url = await dog.pet_get()
         await ctx.send(url)
 
 bot.add_cog(PetGetter(bot))

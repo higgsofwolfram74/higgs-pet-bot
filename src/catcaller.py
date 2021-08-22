@@ -34,15 +34,13 @@ class Pet_Pics():
         if len(breed) == 4:
             self.link += query + "breed_ids=" + breed
 
-    def query_response(self, params: Dict[str, str]):
+    def query_type(self, gif: bool):
         query = "?"
-        if params["amount"]:
-            query += "limit=" + str(params["amount"]) + "&"
 
         #if params["breed"]:
         #    query += "breed_ids=" + params["breed"] + "&"
 
-        if params["gif"]:
+        if gif:
             query += "mime_types=gif"
         else:
             query += "mime_types=jpg,png"
@@ -59,7 +57,7 @@ class Pet_Pics():
     def picture_urls(self) -> List[str]:
         return [url['url'] for url in self.pictures]
 
-    async def simple_pet(self) -> str:
+    async def pet_get(self) -> str:
         await self.get_key()
 
         await self.load_pictures()
