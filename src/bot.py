@@ -5,7 +5,7 @@ from discord.ext import commands
 
 from catcaller import Pet_Pics
 
-TOKEN = json.load(Path("D:/vscode/pyspls/cat-bot/env-var/env.json").open("r"))["DISCORD_TOKEN"]
+TOKEN = json.load(Path("./env-var/env.json").open("r"))["DISCORD_TOKEN"]
 
 bot = commands.Bot(command_prefix="~")
 
